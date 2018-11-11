@@ -4,7 +4,9 @@
 #include <math.h>
 #include "FusionEKF.h"
 #include "tools.h"
+// This is a test
 
+deliberate mistake
 using namespace std;
 
 // for convenience
@@ -171,7 +173,8 @@ int main()
     std::cout << "Disconnected" << std::endl;
   });
 
-  int port = 4567;
+  //int port = 4567;
+  int port =3000;
   if (h.listen(port))
   {
     std::cout << "Listening to port " << port << std::endl;
