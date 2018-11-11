@@ -4,9 +4,7 @@
 #include <math.h>
 #include "FusionEKF.h"
 #include "tools.h"
-// This is a test
 
-deliberate mistake
 using namespace std;
 
 // for convenience
