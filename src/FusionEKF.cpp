@@ -30,13 +30,16 @@ FusionEKF::FusionEKF() {
   R_radar_ << 0.09, 0, 0,
         0, 0.0009, 0,
         0, 0, 0.09;
-
+//from section 10 lesson 5 here
   /**
   TODO:
     * Finish initializing the FusionEKF.
     * Set the process and measurement noises
   */
-
+  // from online Q+A video https://www.youtube.com/watch?list=PLAwxTw4SYaPnfR7TzRZN-uxlxGbqxhtm2&v=J7WK9gEUltM
+  H_laser_ << 1,0,0,0, 
+    		0,1,0,0;
+//quiz 9 section 13 lesson 5 here
 
 }
 
