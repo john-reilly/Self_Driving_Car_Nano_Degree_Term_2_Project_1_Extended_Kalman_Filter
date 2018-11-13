@@ -65,6 +65,10 @@ FusionEKF::FusionEKF() {
 //			  0, 1, 0, 0,
 //			  0, 0, 1000, 0,
 //			  0, 0, 0, 1000;
+  
+  //Set the accleration noise compnents
+  noise_ax = 5 ;//as per quiz 9 video 13 lesson 5
+  noise_ay = 5 ; //as per quiz 9 video 13 lesson 5
 
 }
 
