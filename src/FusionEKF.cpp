@@ -67,8 +67,8 @@ FusionEKF::FusionEKF() {
 //			  0, 0, 0, 1000;
   
   //Set the accleration noise compnents
-  noise_ax = 5 ;//as per quiz 9 video 13 lesson 5
-  noise_ay = 5 ; //as per quiz 9 video 13 lesson 5
+  double noise_ax = 5 ; //9 in video 5 in quiz as per quiz 9 video 13 lesson 5
+  double noise_ay = 5 ; //9 in video 5 in quiz as per quiz 9 video 13 lesson 5
 
 }
 
@@ -93,18 +93,50 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
     // first measurement
     cout << "EKF: " << endl;
     ekf_.x_ = VectorXd(4);
-    ekf_.x_ << 1, 1, 1, 1;
+    ekf_.x_ << 1, 1, 1, 1; //as per video this is important for RMSE
 
     if (measurement_pack.sensor_type_ == MeasurementPackage::RADAR) {
       /**
       Convert radar from polar to cartesian coordinates and initialize state.
       */
+      
+      //as per Q+A video just set ekf_.x_(0) to ro*cos(theta)
+      //as per Q+A video just set ekf_.x_(1) to ro*sin(theta)
+      // from Data file description Project Lesson 6
+      // For a row containing radar data, the columns are: sensor_type, rho_measured, phi_measured, 
+      //rhodot_measured, timestamp, x_groundtruth, y_groundtruth, vx_groundtruth, vy_groundtruth, yaw_groundtruth, yawrate_groundtruth.
+      float rho = measurement_pack.raw_measurements_(0) ;
+      float theta = measurement_pack.raw_measurements_(1) ;//theta is called phi_measured in lesson 6
+      //float rhodot = measurement_pack.raw_measurements_(2) ;
+      
+      ekf_.x_(0) = rho*cos(theta);
+      ekf_.x_(1) = rho*sin(theta);
+      
+      
+      
     }
     else if (measurement_pack.sensor_type_ == MeasurementPackage::LASER) {
       /**
       Initialize state.
       */
+      ekf_.x_(0) = measurement_pack.raw_measurements_(0) ; //I thought this was 1 and 2 for below but first word in package "sensor type" is parsed off and first data is now position 0
+      ekf_.x_(1) = measurement_pack.raw_measurements_(1) ;
+      //from lesson 6 For a row containing lidar data, the columns are: sensor_type, x_measured, y_measured, timestamp, x_groundtruth, y_groundtruth, vx_groundtruth, vy_groundtruth, yaw_groundtruth, yawrate_groundtruth.
     }
+    //ekf_.F is set to << 1 diagonal matirx // as per Q+A
+    //previous timestamp is measurement_package.timestamp // as per Q+A
+    //from Lesson 5 video 13 quiz
+    	//the initial transition matrix F_
+	//kf_.F_ = MatrixXd(4, 4);
+	//kf_.F_ << 1, 0, 1, 0,
+	//		  0, 1, 0, 1,
+	//		  0, 0, 1, 0,
+	//		  0, 0, 0, 1;
+    ekf_.F_ << 1, 0, 1, 0,
+			  0, 1, 0, 1,
+			  0, 0, 1, 0,
+			  0, 0, 0, 1;
+    previous_timestamp_ = measurement_pack.timestamp_;
 
     // done initializing, no need to predict or update
     is_initialized_ = true;
