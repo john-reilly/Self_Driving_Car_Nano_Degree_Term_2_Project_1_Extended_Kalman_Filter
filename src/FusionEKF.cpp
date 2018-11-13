@@ -39,7 +39,32 @@ FusionEKF::FusionEKF() {
   // from online Q+A video https://www.youtube.com/watch?list=PLAwxTw4SYaPnfR7TzRZN-uxlxGbqxhtm2&v=J7WK9gEUltM
   H_laser_ << 1,0,0,0, 
     		0,1,0,0;
+  
+  ekf_.F_ = MatrixXd(4,4);// 4 * 4 Matrix (state transition)
+  ekf_.F_ << 1,0,1,0,
+  			0,1,0,1,
+  			0,0,1,0,
+            0,0,0,1;
+  //from Lesson 5 Video 13 Quiz file: tracking.cpp
+  //the initial transition matrix F_
+//kf_.F_ = MatrixXd(4, 4);
+//kf_.F_ << 1, 0, 1, 0,
+//		  0, 1, 0, 1,
+//		  0, 0, 1, 0,
+//		  0, 0, 0, 1;   
+    
+  ekf_.P_ = MatrixXd(4,4); // 4 * 4 Matrix
+  ekf_.P_ << 1,0,0,0,
+            0,1,0,1,
+            0,0,1000,0,
+            0,0,0,1000;
 //quiz 9 section 13 lesson 5 here
+    	//state covariance matrix P
+//	kf_.P_ = MatrixXd(4, 4);
+//	kf_.P_ << 1, 0, 0, 0,
+//			  0, 1, 0, 0,
+//			  0, 0, 1000, 0,
+//			  0, 0, 0, 1000;
 
 }
 
