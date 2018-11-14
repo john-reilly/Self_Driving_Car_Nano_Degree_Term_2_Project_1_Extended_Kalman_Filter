@@ -195,8 +195,26 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
 
   if (measurement_pack.sensor_type_ == MeasurementPackage::RADAR) {
     // Radar updates
+    // as per Q+A video
+    //set ekf_.H_ by setting to Hj which is the calculated Jackobian
+    ekf_.H_ = tools.CalculateJacobian(ekf_.x_); // finish calcute jackobian
+    //set ekf_.R_  by just using R_radar
+    ekf_.R_ = R_radar_ ;
+      
+    //ekf_.UpdateEKF( measurement_pack.raw_measurements_); // as per Q+A video
+    
+    
   } else {
-    // Laser updates
+    // Laser updates // as per Q+A video
+    //set ekf_.H_  by just using H_laser
+     ekf_.H_ = H_laser_;
+    //set ekf_.R_  by just using R_laser // as per Q+A video
+     ekf_.R_ = R_laser_ ;
+    
+    //ekf_.UpdateEKF( measurement_pack.raw measurements_); // as per Q+A video
+    ekf_.UpdateEKF( measurement_pack.raw_measurements_);
+    
+    
   }
 
   // print the output
