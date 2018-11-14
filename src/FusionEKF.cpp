@@ -146,14 +146,28 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
   /*****************************************************************************
    *  Prediction
    ****************************************************************************/
-  // as per Q+A
+  // as per Q+A video
   float dt = (measurement_pack.timestamp_ - previous_timestamp_ ) / 1000000.0; // dt expressed in seconds
   previous_timestamp_ = measurement_pack.timestamp_ ;
   
   float dt_2 = dt * dt;
   float dt_3 = dt_2 * dt;
   float dt_4 = dt_3 * dt;
+  // as per Q+A video
+  //Modify the F matrix so that the time is integrated section 8 of lesson 5
+  ekf_.F_(0 , 2) = dt ;
+  ekf_.F_(1 , 3) = dt ;
   
+  //set the process covariance matrix Q Section 9 of lesson 5
+  // I got error about noise_ax and noise_ay not been delared in this scope so added below delarations
+  double noise_ax = 5 ; //9 in video 5 in quiz as per quiz 9 video 13 lesson 5
+  double noise_ay = 5 ;
+  
+  ekf_.Q_ = MatrixXd(4,4) ;
+  ekf_.Q_ << dt_4 / 4 * noise_ax , 0 , dt_3/2 * noise_ax ,0,
+  			0, dt_4/4 * noise_ay , 0 , dt_3/2 * noise_ay,
+  			dt_3/2 * noise_ax, 0 , dt_2 * noise_ax, 0 ,
+  			0 , dt_3/2 * noise_ay, 0 , dt_2 *  noise_ay;
   
 
   /**
