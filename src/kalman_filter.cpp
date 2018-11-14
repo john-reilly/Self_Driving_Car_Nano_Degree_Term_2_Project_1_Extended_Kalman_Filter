@@ -21,6 +21,12 @@ void KalmanFilter::Init(VectorXd &x_in, MatrixXd &P_in, MatrixXd &F_in,
 }
 
 void KalmanFilter::Predict() {
+  
+  // from Q+A video
+  x_ = F_ * x_ ; //section 8 lesson 5
+  MatrixXd Ft = F_.transpose(); //section 9 lesson 5
+  P_ = F_ * P_ * Ft + Q_ ;   // from Q+A video
+  
   /**
   TODO:
     * predict the state
