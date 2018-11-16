@@ -202,6 +202,7 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
     ekf_.R_ = R_radar_ ;
       
     //ekf_.UpdateEKF( measurement_pack.raw_measurements_); // as per Q+A video
+     ekf_.UpdateEKF( measurement_pack.raw_measurements_);
     
     
   } else {
