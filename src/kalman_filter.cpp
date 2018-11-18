@@ -84,6 +84,14 @@ void KalmanFilter::UpdateEKF(const VectorXd &z) {
   z_predict << rho,theta,rho_dot ;
   cout <<" Debug print out: UpdateEKF line 83: after z_predict rho,theta,rho_dot "<< endl;
   VectorXd y_ = z - z_predict ;
+    // from Slack channel about pi   ..implenmts normailisting angles from Tips & Tricks section 7
+    //while(y(1) > M_PI) { y(1) -= M_PI; }
+    //while(y(1) < -M_PI) { y(1) += M_PI; }
+  cout <<" Debug print out: UpdateEKF line 90: before M_PI NORMALISATION "<< endl;
+  while(y_(1) > M_PI) { y_(1) -= M_PI; }
+  while(y_(1) < -M_PI) { y_(1) += M_PI; }
+  cout <<" Debug print out: UpdateEKF line 93: after M_PI NORMALISATION "<< endl;
+  
   cout <<" Debug print out: UpdateEKF line 85: y_ "<< endl;
     //section 8 of lesson 5 Q+A say section 7 not 8 but that is Quiz and 8 is answer to quiz
  // VectorXd y = z - H * x; // this line in quiz answer but not Q+A video
@@ -92,7 +100,7 @@ void KalmanFilter::UpdateEKF(const VectorXd &z) {
   MatrixXd S_ = H_ * P_ * Ht_ + R_;
   MatrixXd Si_ = S_.inverse();
   MatrixXd K_ =  P_ * Ht_ * Si_;
-  cout <<" Debug print out: UpdateEKF line 93: before I_ matrix "<< endl;
+  cout <<" Debug print out: UpdateEKF line 93: before I_ matrix "<< endl;//crash just after this line
   MatrixXd I_ ; // similar to line 48 // Identity matrix from quiz section 7 of lesson 2 not mentioned in video
   I_ = MatrixXd::Identity(2, 2); //from quiz ssection 8 lesson 5.  (2,2) might need to change
 

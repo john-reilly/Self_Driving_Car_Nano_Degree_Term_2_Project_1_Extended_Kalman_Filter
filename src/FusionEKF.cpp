@@ -208,10 +208,10 @@ cout <<"Debug print out: line 200 start of update before if statement" << endl;
     ekf_.R_ = R_radar_ ;
     
     
-    // from Slack channel about pi   somewhere around here
+    // from Slack channel about pi   somewhere around here //I am puttin gthis idea into updateEKF()
     //while(y(1) > M_PI) { y(1) -= M_PI; }
     //while(y(1) < -M_PI) { y(1) += M_PI; }
-      cout <<"Debug print out: line 214  end if statement== RADAR" << endl;
+      cout <<"Debug print out: line 214  end if statement== RADAR" << endl; //got this far in test
     //ekf_.UpdateEKF( measurement_pack.raw_measurements_); // as per Q+A video
      ekf_.UpdateEKF( measurement_pack.raw_measurements_); //bug fixed had updateEKF here
     
