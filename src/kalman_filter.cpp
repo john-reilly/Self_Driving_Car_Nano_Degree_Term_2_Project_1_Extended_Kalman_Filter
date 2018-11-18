@@ -50,7 +50,7 @@ void KalmanFilter::Update(const VectorXd &z) {
   MatrixXd I_ ; // Identity matrix from quiz section 7 of lesson 2 not mentioned in video
   
   //New State // from Q+A video // In section 7 of lesson 5
-  I_ = MatrixXd::Identity(2, 2); //from quiz section 7 of lesson 5 2,2 might be wrong check...
+  I_ = MatrixXd::Identity(4,4); //from quiz section 7 of lesson 5 2,2 might be wrong check... yes caused gried 4,4 correct 
   x_ = x_ + (K_ * y_);
   P_ = ( I_ - K_ * H_ ) * P_;
   //below was added in error from video then deleted....I might use it ...
@@ -102,7 +102,7 @@ void KalmanFilter::UpdateEKF(const VectorXd &z) {
   MatrixXd K_ =  P_ * Ht_ * Si_;
   cout <<" Debug print out: UpdateEKF line 93: before I_ matrix "<< endl;//crash just after this line
   MatrixXd I_ ; // similar to line 48 // Identity matrix from quiz section 7 of lesson 2 not mentioned in video
-  I_ = MatrixXd::Identity(2, 2); //from quiz ssection 8 lesson 5.  (2,2) might need to change
+  I_ = MatrixXd::Identity(4,4); //from quiz ssection 8 lesson 5.  (2,2) might need to changed to 4,4
 
   //new state //section 8 of lesson 5 Q+A say section 7 not 8 but that is Quiz and 8 is answer to quiz
   x_ = x_ + (K_ * y_);
