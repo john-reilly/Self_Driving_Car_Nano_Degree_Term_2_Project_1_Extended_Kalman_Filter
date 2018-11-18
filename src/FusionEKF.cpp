@@ -161,8 +161,8 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
   
   //set the process covariance matrix Q Section 9 of lesson 5
   // I got error about noise_ax and noise_ay not been delared in this scope so added below delarations
-  double noise_ax = 5 ; //9 in video 5 in quiz as per quiz 9 video 13 lesson 5
-  double noise_ay = 5 ;
+  double noise_ax = 9 ; //changef to 9 was 5 ....9 in video 5 in quiz as per quiz 9 video 13 lesson 5
+  double noise_ay = 9;//changef to 9 was 5  ....9 in video 5 in quiz as per quiz 9 video 13 lesson 5
   
   ekf_.Q_ = MatrixXd(4,4) ;
   ekf_.Q_ << dt_4 / 4 * noise_ax , 0 , dt_3/2 * noise_ax ,0,
@@ -202,12 +202,13 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
     //set ekf_.R_  by just using R_radar
     ekf_.R_ = R_radar_ ;
     
+    
     // from Slack channel about pi   somewhere around here
     //while(y(1) > M_PI) { y(1) -= M_PI; }
     //while(y(1) < -M_PI) { y(1) += M_PI; }
       
     //ekf_.UpdateEKF( measurement_pack.raw_measurements_); // as per Q+A video
-     ekf_.UpdateEKF( measurement_pack.raw_measurements_);
+     ekf_.Update( measurement_pack.raw_measurements_);
     
     
   } else {
