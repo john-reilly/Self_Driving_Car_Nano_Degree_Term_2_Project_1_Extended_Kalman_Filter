@@ -90,12 +90,14 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
       * Create the covariance matrix.
       * Remember: you'll need to convert radar from polar to cartesian coordinates.
     */
+    cout <<"Debug print out: line 93 start of initalisation" << endl;
     // first measurement
     cout << "EKF: " << endl;
     ekf_.x_ = VectorXd(4);
     ekf_.x_ << 1, 1, 1, 1; //as per video this is important for RMSE
 
     if (measurement_pack.sensor_type_ == MeasurementPackage::RADAR) {
+      cout <<"Debug print out: line 100 start of radar section" << endl;
       /**
       Convert radar from polar to cartesian coordinates and initialize state.
       */
@@ -112,13 +114,14 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
       ekf_.x_(0) = rho*cos(theta);
       ekf_.x_(1) = rho*sin(theta);
       
-      
+      cout <<"Debug print out: line 117 end of radar section" << endl;
       
     }
     else if (measurement_pack.sensor_type_ == MeasurementPackage::LASER) {
       /**
       Initialize state.
       */
+            cout <<"Debug print out: line 124 start of lidar section" << endl;
       ekf_.x_(0) = measurement_pack.raw_measurements_(0) ; //I thought this was 1 and 2 for below but first word in package "sensor type" is parsed off and first data is now position 0
       ekf_.x_(1) = measurement_pack.raw_measurements_(1) ;
       //from lesson 6 For a row containing lidar data, the columns are: sensor_type, x_measured, y_measured, timestamp, x_groundtruth, y_groundtruth, vx_groundtruth, vy_groundtruth, yaw_groundtruth, yawrate_groundtruth.
@@ -140,13 +143,14 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
 
     // done initializing, no need to predict or update
     is_initialized_ = true;
+    cout <<"Debug print out: line 146 end of lidar section" << endl;
     return;
   }
 
   /*****************************************************************************
    *  Prediction
    ****************************************************************************/
- 
+ cout <<"Debug print out: line 153 start of predict" << endl;
   // as per Q+A video
   float dt = (measurement_pack.timestamp_ - previous_timestamp_ ) / 1000000.0; // dt expressed in seconds
   previous_timestamp_ = measurement_pack.timestamp_ ;
@@ -170,7 +174,7 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
   			dt_3/2 * noise_ax, 0 , dt_2 * noise_ax, 0 ,
   			0 , dt_3/2 * noise_ay, 0 , dt_2 *  noise_ay;
   
-
+cout <<"Debug print out: line 177  end of predict" << endl;
   /**
    TODO:
      * Update the state transition matrix F according to the new elapsed time.
@@ -193,8 +197,9 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
      * Use the sensor type to perform the update step.
      * Update the state and covariance matrices.
    */
-
+cout <<"Debug print out: line 200 start of update before if statement" << endl;
   if (measurement_pack.sensor_type_ == MeasurementPackage::RADAR) {
+    cout <<"Debug print out: line 202  if statement== RADAR" << endl;
     // Radar updates
     // as per Q+A video
     //set ekf_.H_ by setting to Hj which is the calculated Jackobian
@@ -206,18 +211,19 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
     // from Slack channel about pi   somewhere around here
     //while(y(1) > M_PI) { y(1) -= M_PI; }
     //while(y(1) < -M_PI) { y(1) += M_PI; }
-      
+      cout <<"Debug print out: line 214  end if statement== RADAR" << endl;
     //ekf_.UpdateEKF( measurement_pack.raw_measurements_); // as per Q+A video
      ekf_.UpdateEKF( measurement_pack.raw_measurements_); //bug fixed had updateEKF here
     
     
   } else {
+    cout <<"Debug print out: line 220 else if statement== laser" << endl;
     // Laser updates // as per Q+A video
     //set ekf_.H_  by just using H_laser
      ekf_.H_ = H_laser_;
     //set ekf_.R_  by just using R_laser // as per Q+A video
      ekf_.R_ = R_laser_ ;
-    
+    cout <<"Debug print out: line 226 end  if statement== laser" << endl;
     //ekf_.UpdateEKF( measurement_pack.raw measurements_); // as per Q+A video
     ekf_.Update( measurement_pack.raw_measurements_); //change line 211 by mistake...
     
