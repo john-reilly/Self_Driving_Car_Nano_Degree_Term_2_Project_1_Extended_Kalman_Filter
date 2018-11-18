@@ -146,6 +146,7 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
   /*****************************************************************************
    *  Prediction
    ****************************************************************************/
+  /* Comment out prediction and update to fgind bug
   // as per Q+A video
   float dt = (measurement_pack.timestamp_ - previous_timestamp_ ) / 1000000.0; // dt expressed in seconds
   previous_timestamp_ = measurement_pack.timestamp_ ;
@@ -169,7 +170,7 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
   			dt_3/2 * noise_ax, 0 , dt_2 * noise_ax, 0 ,
   			0 , dt_3/2 * noise_ay, 0 , dt_2 *  noise_ay;
   
-
+*/ //comment out to find bug
   /**
    TODO:
      * Update the state transition matrix F according to the new elapsed time.
@@ -180,9 +181,9 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
   
   
   
-
+/* //comment out to find bug
   ekf_.Predict();
-
+*/ //comment out to find bug
   /*****************************************************************************
    *  Update
    ****************************************************************************/
@@ -192,14 +193,18 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
      * Use the sensor type to perform the update step.
      * Update the state and covariance matrices.
    */
-
+/* //comment out to find bug
   if (measurement_pack.sensor_type_ == MeasurementPackage::RADAR) {
     // Radar updates
     // as per Q+A video
     //set ekf_.H_ by setting to Hj which is the calculated Jackobian
-    ekf_.H_ = tools.CalculateJacobian(ekf_.x_); // finish calcute jackobian
+    ekf_.H_ = tools.CalculateJacobian(ekf_.x_); // finish calcute jackobian ..done
     //set ekf_.R_  by just using R_radar
     ekf_.R_ = R_radar_ ;
+    
+    // from Slack channel about pi   somewhere around here
+    //while(y(1) > M_PI) { y(1) -= M_PI; }
+    //while(y(1) < -M_PI) { y(1) += M_PI; }
       
     //ekf_.UpdateEKF( measurement_pack.raw_measurements_); // as per Q+A video
      ekf_.UpdateEKF( measurement_pack.raw_measurements_);
@@ -221,4 +226,6 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
   // print the output
   cout << "x_ = " << ekf_.x_ << endl;
   cout << "P_ = " << ekf_.P_ << endl;
+  
+  */ //comment out to find bug
 }
