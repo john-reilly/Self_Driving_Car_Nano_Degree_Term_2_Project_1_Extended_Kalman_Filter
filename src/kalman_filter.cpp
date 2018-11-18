@@ -83,7 +83,7 @@ void KalmanFilter::UpdateEKF(const VectorXd &z) {
   
     //section 8 of lesson 5 Q+A say section 7 not 8 but that is Quiz and 8 is answer to quiz
  // VectorXd y = z - H * x; // this line in quiz answer but not Q+A video
-  // underscopres added for consitency
+  // underscores added for consitency
   MatrixXd Ht_ = H_.transpose();
   MatrixXd S_ = H_ * P_ * Ht_ + R_;
   MatrixXd Si_ = S_.inverse();

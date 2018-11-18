@@ -208,7 +208,7 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
     //while(y(1) < -M_PI) { y(1) += M_PI; }
       
     //ekf_.UpdateEKF( measurement_pack.raw_measurements_); // as per Q+A video
-     ekf_.Update( measurement_pack.raw_measurements_);
+     ekf_.UpdateEKF( measurement_pack.raw_measurements_); //bug fixed had updateEKF here
     
     
   } else {
@@ -219,7 +219,7 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
      ekf_.R_ = R_laser_ ;
     
     //ekf_.UpdateEKF( measurement_pack.raw measurements_); // as per Q+A video
-    ekf_.UpdateEKF( measurement_pack.raw_measurements_);
+    ekf_.Update( measurement_pack.raw_measurements_); //change line 211 by mistake...
     
     
   }
