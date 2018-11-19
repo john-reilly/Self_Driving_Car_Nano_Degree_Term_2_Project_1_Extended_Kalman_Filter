@@ -90,7 +90,7 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
       * Create the covariance matrix.
       * Remember: you'll need to convert radar from polar to cartesian coordinates.
     */
-    cout <<"Debug print out: line 93 start of initalisation" << endl;
+   // cout <<"Debug print out: line 93 start of initalisation" << endl;
     // first measurement
     cout << "EKF: " << endl;
     ekf_.x_ = VectorXd(4);
@@ -114,7 +114,7 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
       ekf_.x_(0) = rho*cos(theta);
       ekf_.x_(1) = rho*sin(theta);
       
-      cout <<"Debug print out: line 117 end of radar section" << endl;
+    //  cout <<"Debug print out: line 117 end of radar section" << endl;
       
     }
     else if (measurement_pack.sensor_type_ == MeasurementPackage::LASER) {
@@ -174,7 +174,7 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
   			dt_3/2 * noise_ax, 0 , dt_2 * noise_ax, 0 ,
   			0 , dt_3/2 * noise_ay, 0 , dt_2 *  noise_ay;
   
-cout <<"Debug print out: line 177  end of predict" << endl;
+//cout <<"Debug print out: line 177  end of predict" << endl;
   /**
    TODO:
      * Update the state transition matrix F according to the new elapsed time.
@@ -197,9 +197,9 @@ cout <<"Debug print out: line 177  end of predict" << endl;
      * Use the sensor type to perform the update step.
      * Update the state and covariance matrices.
    */
-cout <<"Debug print out: line 200 start of update before if statement" << endl;
+//cout <<"Debug print out: line 200 start of update before if statement" << endl;
   if (measurement_pack.sensor_type_ == MeasurementPackage::RADAR) {
-    cout <<"Debug print out: line 202  if statement== RADAR" << endl;
+   // cout <<"Debug print out: line 202  if statement== RADAR" << endl;
     // Radar updates
     // as per Q+A video
     //set ekf_.H_ by setting to Hj which is the calculated Jackobian
@@ -211,7 +211,7 @@ cout <<"Debug print out: line 200 start of update before if statement" << endl;
     // from Slack channel about pi   somewhere around here //I am puttin gthis idea into updateEKF()
     //while(y(1) > M_PI) { y(1) -= M_PI; }
     //while(y(1) < -M_PI) { y(1) += M_PI; }
-      cout <<"Debug print out: line 214  end if statement== RADAR" << endl; //got this far in test
+     // cout <<"Debug print out: line 214  end if statement== RADAR" << endl; //got this far in test
     //ekf_.UpdateEKF( measurement_pack.raw_measurements_); // as per Q+A video
      ekf_.UpdateEKF( measurement_pack.raw_measurements_); //bug fixed had updateEKF here
     
@@ -223,7 +223,7 @@ cout <<"Debug print out: line 200 start of update before if statement" << endl;
      ekf_.H_ = H_laser_;
     //set ekf_.R_  by just using R_laser // as per Q+A video
      ekf_.R_ = R_laser_ ;
-    cout <<"Debug print out: line 226 end  if statement== laser" << endl;
+   // cout <<"Debug print out: line 226 end  if statement== laser" << endl;
     //ekf_.UpdateEKF( measurement_pack.raw measurements_); // as per Q+A video
     ekf_.Update( measurement_pack.raw_measurements_); //change line 211 by mistake...
     
