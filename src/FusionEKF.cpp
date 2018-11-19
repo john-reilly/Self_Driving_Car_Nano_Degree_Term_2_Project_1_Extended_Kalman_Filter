@@ -67,8 +67,8 @@ FusionEKF::FusionEKF() {
 //			  0, 0, 0, 1000;
   
   //Set the accleration noise compnents
-  double noise_ax = 9 ; // was 5 set to nine as per video  9 in video 5 in quiz as per quiz 9 video 13 lesson 5
-  double noise_ay = 9 ; //was 5 set to nine as per video 9 in video 5 in quiz as per quiz 9 video 13 lesson 5
+ // double noise_ax = 9 ; // was 5 set to nine as per video  9 in video 5 in quiz as per quiz 9 video 13 lesson 5
+ // double noise_ay = 9 ; //was 5 set to nine as per video 9 in video 5 in quiz as per quiz 9 video 13 lesson 5
 
 }
 
@@ -94,10 +94,22 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
     // first measurement
     cout << "EKF: " << endl;
     ekf_.x_ = VectorXd(4);
-    ekf_.x_ << 1, 1, 1, 1; //as per video this is important for RMSE
-
+    //ekf_.x_ << 0,0,0,0 ;//changing to 0 to see effect //ekf_.x_ << 1, 1, 1, 1; //as per video this is important for RMSE
+	//ekf_.x_ << 5,5,5,5 ;
+   // ekf_.x_ << 1,1,1,1 ;
+     //ekf_.x_ << 1,1,5,0 ; //best so far
+    //ekf_.x_ << 0,0,5,0 ; // same as 1 1 5 0 as 1 1 gets written over below but wanted to check anyway
+    //ekf_.x_ << 0,0,5,1 ; //slightly worse than 1 1 5 0
+    //ekf_.x_ << 0,0,6,0 ; // tiny bit better in one worse in another
+    ekf_.x_ << 0,0,5.5,0 ;//tiny bit better than 0 0 6 0
+    
+    
+    
+    
+    
+    
     if (measurement_pack.sensor_type_ == MeasurementPackage::RADAR) {
-      cout <<"Debug print out: line 100 start of radar section" << endl;
+     // cout <<"Debug print out: line 100 start of radar section" << endl;
       /**
       Convert radar from polar to cartesian coordinates and initialize state.
       */
@@ -110,9 +122,11 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
       float rho = measurement_pack.raw_measurements_(0) ;
       float theta = measurement_pack.raw_measurements_(1) ;//theta is called phi_measured in lesson 6
       //float rhodot = measurement_pack.raw_measurements_(2) ;
-      
+      //from tips and tricks section Although radar gives velocity data in the form of the range rate ρ˙\dot{\rho}ρ˙​, a radar measurement does not contain enough information to determine the state variable velocities vxv_xvx​ and vyv_yvy​. You can, however, use the radar measurements ρ\rhoρ and ϕ\phiϕ to initialize the state variable locations pxp_xpx​ and pyp_ypy​.
       ekf_.x_(0) = rho*cos(theta);
       ekf_.x_(1) = rho*sin(theta);
+      //ekf_.x_(2) = rhodot*cos(theta);//experiment
+      //ekf_.x_(3) = rhodot*sin(theta);// this and above line made no difference as per hint suggestion leaving both out
       
     //  cout <<"Debug print out: line 117 end of radar section" << endl;
       
@@ -121,7 +135,7 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
       /**
       Initialize state.
       */
-            cout <<"Debug print out: line 124 start of lidar section" << endl;
+          //  cout <<"Debug print out: line 124 start of lidar section" << endl;
       ekf_.x_(0) = measurement_pack.raw_measurements_(0) ; //I thought this was 1 and 2 for below but first word in package "sensor type" is parsed off and first data is now position 0
       ekf_.x_(1) = measurement_pack.raw_measurements_(1) ;
       //from lesson 6 For a row containing lidar data, the columns are: sensor_type, x_measured, y_measured, timestamp, x_groundtruth, y_groundtruth, vx_groundtruth, vy_groundtruth, yaw_groundtruth, yawrate_groundtruth.
@@ -143,14 +157,14 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
 
     // done initializing, no need to predict or update
     is_initialized_ = true;
-    cout <<"Debug print out: line 146 end of lidar section" << endl;
+   // cout <<"Debug print out: line 146 end of lidar section" << endl;
     return;
   }
 
   /*****************************************************************************
    *  Prediction
    ****************************************************************************/
- cout <<"Debug print out: line 153 start of predict" << endl;
+// cout <<"Debug print out: line 153 start of predict" << endl;
   // as per Q+A video
   float dt = (measurement_pack.timestamp_ - previous_timestamp_ ) / 1000000.0; // dt expressed in seconds
   previous_timestamp_ = measurement_pack.timestamp_ ;
@@ -217,7 +231,7 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
     
     
   } else {
-    cout <<"Debug print out: line 220 else if statement== laser" << endl;
+    //cout <<"Debug print out: line 220 else if statement== laser" << endl;
     // Laser updates // as per Q+A video
     //set ekf_.H_  by just using H_laser
      ekf_.H_ = H_laser_;
